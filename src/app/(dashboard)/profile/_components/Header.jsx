@@ -5,6 +5,8 @@ import Avatar from "@/components/ui/Avatar";
 import { useAuth } from "@/context/AuthContext";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import Darwer from "@/components/ui/Darwer";
+import SideBar from "./SideBar";
 
 function Header({}) {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -44,6 +46,9 @@ function Header({}) {
         <Link href="/profile">
           <Avatar src={user?.avatarUrl} />
         </Link>
+        <Darwer open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)}>
+          <SideBar onClose={() => setIsOpenDrawer(false)} />
+        </Darwer>
       </div>
     </header>
   );
