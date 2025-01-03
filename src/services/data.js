@@ -9,6 +9,9 @@ import { cookies } from "next/headers";
 export async function fetchCardData() {
   const cookieStore = cookies();
   const options = setCookiesOnReq(cookieStore);
+
+  // await new Promise((res) => setTimeout(res, 3000));
+
   try {
     const data = await Promise.all([
       getAllUsersApi(options),
@@ -28,5 +31,14 @@ export async function fetchCardData() {
   } catch (error) {
     console.error("خطا", error.response.data.message);
     throw new Error("خطا در بارگذاری اطلاعات");
+  }
+}
+
+export async function fetchLatestPosts() {
+  try {
+    const posts = await getAllPostsApi("sort=latest&limit=5");
+    return posts;
+  } catch (error) {
+    throw new Error(error?.response?.data?.message);
   }
 }

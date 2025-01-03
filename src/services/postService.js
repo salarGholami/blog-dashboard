@@ -1,7 +1,7 @@
 import http from "./httpService";
 
 export async function getAllPostsApi(queries, options = {}) {
-
+  await new Promise((res) => setTimeout(res, 3000));
   return http
     .get(`/post/list?${queries}`, options)
     .then(({ data }) => data.data);
