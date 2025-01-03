@@ -12,7 +12,6 @@ export default function RootLayout({ children }) {
       <div className="grid grid-cols-12 h-screen">
         <aside className="col-span-12 lg:col-span-3 xl:col-span-2 hidden lg:block">
           <SideBar />
-
         </aside>
         <div className="col-span-12 lg:col-span-9 xl:col-span-10 h-screen flex flex-col">
           <Header />

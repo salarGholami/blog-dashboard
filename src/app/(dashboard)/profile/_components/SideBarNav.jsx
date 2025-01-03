@@ -47,9 +47,9 @@ export default function SideBarNavs() {
   const router = useRouter();
   return (
     <ul className="space-y-2">
-      {sidebarNavs.map((nav) => {
+      {sidebarNavs.map((nav, index) => {
         return (
-          <li key={nav.id}>
+          <li key={index}>
             <Link
               href={nav.href}
               className={classNames(

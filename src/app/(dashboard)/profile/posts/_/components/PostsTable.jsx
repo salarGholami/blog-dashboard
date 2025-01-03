@@ -3,13 +3,13 @@ import Table from "@/components/ui/Table";
 import { getAllPostsApi } from "@/services/postService";
 import PostRow from "./PostRow";
 
-async function PostsTable() {
-  const posts = await getAllPostsApi();
+async function PostsTable({query}) {
+  const { posts } = await getAllPostsApi(query);
 
   if (!posts.length) return <Empty resourceName="پستی" />;
 
   return (
-    <div>
+    <div>  
       <Table>
         <Table.Header>
           <th>#</th>
