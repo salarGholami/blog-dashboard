@@ -5,6 +5,7 @@ import Search from "@/components/ui/Search";
 import { CreatePost } from "./_/components/Buttons";
 import queryString from "query-string";
 import { getAllPostsApi } from "@/services/postService";
+import Pagination from "@/components/ui/Pagination";
 
 async function Page({ searchParams }) {
   const query = queryString.stringify(searchParams);
@@ -20,7 +21,9 @@ async function Page({ searchParams }) {
       <Suspense fallback={<Spinner />} key={query}>
         <PostsTable query={query} />
       </Suspense>
-      <div className="mt-5 flex w-full justify-center"></div>
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={totalPages} />
+      </div>
     </div>
   );
 }

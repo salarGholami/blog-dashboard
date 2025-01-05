@@ -1,18 +1,16 @@
 import BlogList from "@/components/blog/BlogList";
-// import Pagination from "@/components/ui/Pagination";
+
 import { getAllPostsApi } from "@/services/postService";
 import setCookiesOnReq from "@/utils/setCookieOnReq";
 import { cookies } from "next/headers";
 import queryString from "query-string";
-
-// export const dynamic = "force-dynamic";
 
 async function Page({ searchParams }) {
   const queries = queryString.stringify(searchParams);
   const cookieStore = cookies();
   const options = setCookiesOnReq(cookieStore);
 
-  const { posts, totalPages } = await getAllPostsApi(queries, options);
+  const { posts } = await getAllPostsApi(queries, options);
 
   const { q: searchValue } = searchParams;
 
@@ -30,9 +28,6 @@ async function Page({ searchParams }) {
       ) : null}
 
       {posts.length > 0 ? <BlogList posts={posts} /> : null}
-      {/* <div className="mt-5 flex w-full justify-center">
-        <BlogList posts={posts} />
-      </div> */}
     </>
   );
 }
