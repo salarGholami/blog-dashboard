@@ -1,20 +1,29 @@
 "use client";
 
+import ButtonIcon from "@/components/ui/ButtonIcon";
+import FileInput from "@/components/ui/FileInput";
 import RHFSelect from "@/components/ui/RHFSelect";
 import RHFTextField from "@/components/ui/RHFTextField";
+import TextField from "@/components/ui/TextField";
 import useCategories from "@/hook/useCategories";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import Image from "next/image";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 const schema = yup.object();
 
 function CreatePostForm() {
   const { categories } = useCategories();
+  const [coverIamgeUrl, serCoverImageUrl] = useState(null);
 
   const {
     register,
+    control,
     formState: { errors },
+    setValue,
   } = useForm({
     mode: "onTouched",
     resolver: yupResolver(schema),
@@ -60,6 +69,48 @@ function CreatePostForm() {
         required
         options={categories}
       />
+      <Controller
+        name="coverImage"
+        control={control}
+        rules={{ required: "کاور پست الزامی است" }}
+        render={({ field: { value, onChange, ...rest } }) => {
+          return (
+            <FileInput
+              type="file"
+              name="my-coverIamge"
+              label="کاور پست"
+              {...rest}
+              value={value?.fileName}
+              onChange={(event) => {
+                const file = event.target.files[0];
+                onChange(file);
+                serCoverImageUrl(URL.createObjectURL(file));
+                event.target.value = null;  
+              }}
+            />
+          );
+        }}
+      />
+      {coverIamgeUrl && (
+        <div className="relative aspect-1 overflow-hidden rounded-lg">
+          <Image
+            fill
+            src={coverIamgeUrl}
+            alt="cover-image"
+            className="object-cover object-center"
+          />
+          <ButtonIcon
+            variant="red"
+            className="w-6 h-6 absolute left-4 top-4"
+            onClick={() => {
+              serCoverImageUrl(null);
+              setValue("coverImage", null);
+            }}
+          >
+            <XMarkIcon />
+          </ButtonIcon>
+        </div>
+      )}
     </form>
   );
 }
