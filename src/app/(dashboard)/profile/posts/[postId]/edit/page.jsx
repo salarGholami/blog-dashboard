@@ -3,21 +3,13 @@ import { getPostById } from "@/services/postService";
 import { notFound } from "next/navigation";
 import CreatePostForm from "../../create/_/CreatePostForm";
 
-<<<<<<< HEAD
-=======
-// export const dynamic = "force-dynamic"
-
->>>>>>> bdefd6c42f62cc8c4e3dc19a5005b067ccccf4dd
 async function EditPostPage({ params: { postId } }) {
   const {
     data: { post },
   } = await getPostById(postId);
 
-<<<<<<< HEAD
   console.log(post);
 
-=======
->>>>>>> bdefd6c42f62cc8c4e3dc19a5005b067ccccf4dd
   if (!post) {
     notFound();
   }
