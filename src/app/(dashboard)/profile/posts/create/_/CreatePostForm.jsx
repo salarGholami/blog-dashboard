@@ -1,10 +1,10 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
 import FileInput from "@/components/ui/FileInput";
 import RHFSelect from "@/components/ui/RHFSelect";
 import RHFTextField from "@/components/ui/RHFTextField";
-import TextField from "@/components/ui/TextField";
 import useCategories from "@/hook/useCategories";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,25 +12,64 @@ import Image from "next/image";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
+import useCreatePost from "./useCreatePost";
+import { SpinnerMini } from "@/components/ui/Spinner";
+import { useRouter } from "next/navigation";
 
-const schema = yup.object();
+const schema = yup
+  .object({
+    title: yup
+      .string()
+      .min(5, "حداقل ۵ کاراکتر را وارد کنید")
+      .required("عنوان ضروری است"),
+    briefText: yup
+      .string()
+      .min(5, "حداقل ۱۰ کاراکتر را وارد کنید")
+      .required("توضیحات ضروری است"),
+    text: yup
+      .string()
+      .min(5, "حداقل ۱۰ کاراکتر را وارد کنید")
+      .required("توضیحات ضروری است"),
+    slug: yup.string().required("اسلاگ ضروری است"),
+    readingTime: yup
+      .number()
+      .positive()
+      .integer()
+      .required("زمان مطالعه ضروری است")
+      .typeError("یک عدد را وارد کنید"),
+    category: yup.string().required("دسته بندی ضروری است"),
+  })
+  .required();
 
 function CreatePostForm() {
   const { categories } = useCategories();
   const [coverIamgeUrl, serCoverImageUrl] = useState(null);
+  const { createPost, isCreating } = useCreatePost();
+  const router = useRouter();
 
   const {
     register,
     control,
     formState: { errors },
+    handleSubmit,
     setValue,
   } = useForm({
     mode: "onTouched",
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
+    createPost(formData, { onSuccess: () => {
+      router.push("/profile/posts")
+    } });
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <RHFTextField
         name="title"
         label="عنوان"
@@ -77,15 +116,16 @@ function CreatePostForm() {
           return (
             <FileInput
               type="file"
-              name="my-coverIamge"
+              name="coverImage"
               label="کاور پست"
+              errors={errors}
               {...rest}
               value={value?.fileName}
               onChange={(event) => {
                 const file = event.target.files[0];
                 onChange(file);
                 serCoverImageUrl(URL.createObjectURL(file));
-                event.target.value = null;  
+                event.target.value = null;
               }}
             />
           );
@@ -111,6 +151,15 @@ function CreatePostForm() {
           </ButtonIcon>
         </div>
       )}
+      <div>
+        {isCreating ? (
+          <SpinnerMini />
+        ) : (
+          <Button variant="primary" type="submit" className="w-full">
+            تایید
+          </Button>
+        )}
+      </div>
     </form>
   );
 }
