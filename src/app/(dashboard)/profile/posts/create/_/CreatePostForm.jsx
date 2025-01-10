@@ -63,9 +63,11 @@ function CreatePostForm() {
     for (const key in data) {
       formData.append(key, data[key]);
     }
-    createPost(formData, { onSuccess: () => {
-      router.push("/profile/posts")
-    } });
+    createPost(formData, {
+      onSuccess: () => {
+        router.push("/profile/posts");
+      },
+    });
   };
 
   return (
