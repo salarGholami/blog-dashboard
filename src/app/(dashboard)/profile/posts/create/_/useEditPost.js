@@ -9,7 +9,6 @@ export default function useEditPost() {
     mutationFn: editPostApi,
     onSuccess: (data) => {
       toast.success(data.message);
-
       queryClient.invalidateQueries({
         queryKey: ["posts"],
       });
