@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function middleware(req) {
   const url = req.url;
   const pathname = req.nextUrl.pathname;
+  // console.log({ pathname });
 
   if (pathname.startsWith("/signin") || pathname.startsWith("/signup")) {
     const user = await middlewareAuth(req);

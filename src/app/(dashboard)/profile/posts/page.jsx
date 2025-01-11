@@ -1,23 +1,26 @@
-import { Suspense } from "react";
+import { getAllPostsApi } from "@/services/postService";
+import { CreatePost } from "./_/components/Buttons";
 import PostsTable from "./_/components/PostsTable";
+import { Suspense } from "react";
 import { Spinner } from "@/components/ui/Spinner";
 import Search from "@/components/ui/Search";
-import { CreatePost } from "./_/components/Buttons";
 import queryString from "query-string";
-import { getAllPostsApi } from "@/services/postService";
 import Pagination from "@/components/ui/Pagination";
 
-async function Page({ searchParams }) {
+async function PostPage({ searchParams }) {
   const query = queryString.stringify(searchParams);
-  const { totalPages } = await getAllPostsApi();
+
+  const { totalPages } = await getAllPostsApi(query);
+  // const itemsPerPage = Number(searchParams?.limit || ITEMS_PER_PAGE);
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-secondary-800 mb-12 items-center">
-        <h1 className="font-bold text-xl">لیست پست ها</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-secondary-700 mb-12 items-center">
+        <h1 className="text-secondary-700 font-bold text-xl">لیست پست ها</h1>
         <Search />
         <CreatePost />
       </div>
+
       <Suspense fallback={<Spinner />} key={query}>
         <PostsTable query={query} />
       </Suspense>
@@ -27,5 +30,4 @@ async function Page({ searchParams }) {
     </div>
   );
 }
-
-export default Page;
+export default PostPage;

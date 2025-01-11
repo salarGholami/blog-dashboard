@@ -1,21 +1,22 @@
 "use client";
-import { Controller,  useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import RHFTextField from "@/components/ui/RHFTextField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@/components/ui/Button";
 import RHFSelect from "@/components/ui/RHFSelect";
 import * as yup from "yup";
+import useCategories from "@/hook/useCategory";
 import TextField from "@/components/ui/TextField";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ButtonIcon from "@/components/ui/ButtonIcon";
-import {  XMarkIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import useCreatePost from "./useCreatePost";
 import useEditPost from "./useEditPost";
 import { useRouter } from "next/navigation";
 import { imageUrlToFile } from "@/utils/fileFormatter";
+import { revalidatePath } from "next/cache";
 import Loading from "@/components/ui/Loading";
-import useCategories from "@/hook/useCategories";
 
 const schema = yup
   .object({
@@ -113,6 +114,7 @@ function CreatePostForm({ postToEdit = {} }) {
           onSuccess: () => {
             reset();
             router.push("/profile/posts");
+            // revalidatePath(`/profile/posts/${editId}/edit`, "page");
           },
         }
       );
@@ -120,6 +122,7 @@ function CreatePostForm({ postToEdit = {} }) {
       createPost(formData, {
         onSuccess: () => {
           router.push("/profile/posts");
+          // revalidatePath("/profile/posts");
           reset();
         },
       });

@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { editPostApi } from "@/services/postService";
+import { updateCommentApi } from "@/services/commentService";
 
-export default function useEditPost() {
+export default function useUpdateComment() {
   const queryClient = useQueryClient();
 
-  const { isPending: isEditing, mutate: editPost } = useMutation({
-    mutationFn: editPostApi,
+  const { isPending: isUpdating, mutate: updateComment } = useMutation({
+    mutationFn: updateCommentApi,
     onSuccess: (data) => {
       toast.success(data.message);
 
       queryClient.invalidateQueries({
-        queryKey: ["posts"],
+        queryKey: ["comments"],
       });
     },
     onError: (err) => {
@@ -19,5 +19,5 @@ export default function useEditPost() {
     },
   });
 
-  return { isEditing, editPost };
+  return { isUpdating, updateComment };
 }

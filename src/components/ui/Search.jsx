@@ -10,6 +10,7 @@ export default function Search() {
 
   function onSubmit(e) {
     e.preventDefault();
+
     const val = e.target;
     const search = val.search;
     const newParams = new URLSearchParams(searchParams.toString());
@@ -19,7 +20,12 @@ export default function Search() {
     } else {
       newParams.delete("search");
     }
+
+    // console.log(search.value);
+    // router.push(createUrl("/search", newParams));
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+
+    // router.push(pathname + "?" + newParams.toString());
   }
 
   return (

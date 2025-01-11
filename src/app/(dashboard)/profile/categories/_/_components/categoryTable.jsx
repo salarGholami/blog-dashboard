@@ -1,9 +1,9 @@
 import Table from "@/components/ui/Table";
 import Empty from "@/components/ui/Empty";
 import { getAllPostsApi } from "@/services/postService";
-import PostRow from "./PostRow";
+import CategoryRow from "./categoryRow";
 
-async function PostsTable({ query }) {
+async function CategoryTable({ query }) {
   const { posts } = await getAllPostsApi(query);
 
   if (!posts.length) return <Empty resourceName="پستی" />;
@@ -12,19 +12,18 @@ async function PostsTable({ query }) {
     <Table>
       <Table.Header>
         <th>#</th>
-        <th>عنوان</th>
-        <th>دسته بندی</th>
-        <th>نویسنده</th>
+        <th>عنوان دسته بندی</th>
+        <th>ایجاد کننده</th>
         <th>تاریخ ایجاد</th>
-        <th>نوع</th>
         <th>عملیات</th>
       </Table.Header>
       <Table.Body>
         {posts.map((post, index) => (
-          <PostRow key={post._id} post={post} index={index} />
+          <CategoryRow key={post._id} post={post} index={index} />
         ))}
       </Table.Body>
     </Table>
   );
 }
-export default PostsTable;
+
+export default CategoryTable;

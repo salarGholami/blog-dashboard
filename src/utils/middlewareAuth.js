@@ -21,5 +21,19 @@ export default async function middlewareAuth(req) {
   const { user } = data || {};
   return user;
 
-
+  // const options = {
+  //   headers: {
+  //     Cookie:
+  //       `${req.cookies.get("accessToken")?.name}=${
+  //         req.cookies.get("accessToken")?.value
+  //       }; ${req.cookies.get("refreshToken")?.name}=${
+  //         req.cookies.get("refreshToken")?.value
+  //       }` || "-",
+  //   },
+  // };
+  // const options = setCookiesOnReq(req.cookies);
+  // const data = await getUserApi(options);
+  // console.log(data);
+  // const { user } = data || {};
+  // return user;
 }

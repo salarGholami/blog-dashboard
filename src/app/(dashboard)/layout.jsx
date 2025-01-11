@@ -1,5 +1,5 @@
-import Header from "./profile/_components/Header";
-import SideBar from "./profile/_components/SideBar";
+import Header from "./profile/ـ/components/Header";
+import SideBar from "./profile/ـ/components/SideBar";
 
 export const metadata = {
   title: "پروفایل",

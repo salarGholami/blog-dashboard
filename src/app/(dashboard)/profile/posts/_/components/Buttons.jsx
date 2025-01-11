@@ -5,9 +5,10 @@ import ConfirmDelete from "@/components/ui/ConfirmDelete";
 import Modal from "@/components/ui/Modal";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState } from "react";
-import useDeletePost from "../useDeletePost";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import deletePost from "../actions/deletePost";
+import { useFormState } from "react-dom";
+import toast from "react-hot-toast";
 
 export function CreatePost() {
   return (
@@ -16,39 +17,22 @@ export function CreatePost() {
       className="justify-self-end flex gap-x-4 py-3 items-center rounded-lg bg-primary-900 px-4 text-sm font-medium text-secondary-0 
       transition-colors hover:bg-primary-700"
     >
-      <span className="hidden md:block text-primary-100">ایجاد پست</span>
-      <PlusIcon className="w-5 text-primary-100" />
+      <span className="hidden md:block text-secondary-700">ایجاد پست</span>
+      <PlusIcon className="w-5 text-secondary-700" />
     </Link>
   );
 }
 
-export function DeletePost({ post: { _id: id, title } }) {
-  const [open, setOpen] = useState(false);
-  const { isDeleting, deletePost } = useDeletePost();
-  const router = useRouter();
+export function CreateCategory() {
   return (
-    <>
-      <ButtonIcon variant="outline" onClick={() => setOpen(true)}>
-        <TrashIcon className="text-error" />
-      </ButtonIcon>
-      <Modal title={`حذف ${title}`} open={open} onClose={() => setOpen(false)}>
-        <ConfirmDelete
-          resourceName={title}
-          onClose={() => setOpen(false)}
-          onConfirm={(e) => {
-            e.preventDefault();
-            //delete post
-            deletePost(id, {
-              onSuccess: () => {
-                setOpen(false);
-                router.refresh("/profile/posts");
-              },
-            });
-          }}
-          disabled={isDeleting}
-        />
-      </Modal>
-    </>
+    <Link
+      href="/profile/posts/create"
+      className="justify-self-end flex gap-x-4 py-3 items-center rounded-lg bg-primary-900 px-4 text-sm font-medium text-secondary-0 
+      transition-colors hover:bg-primary-700"
+    >
+      <span className="hidden md:block text-secondary-700">ایجاد دسته بندی</span>
+      <PlusIcon className="w-5 text-secondary-700" />
+    </Link>
   );
 }
 
@@ -59,5 +43,46 @@ export function UpdatePost({ id }) {
         <PencilIcon />
       </ButtonIcon>
     </Link>
+  );
+}
+
+export function DeletePost({ id: postId, postTitle }) {
+  // const deletePostWithId = ;
+  const [state, formAction] = useFormState(deletePost, {
+    error: "",
+    message: "",
+  });
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  useEffect(() => {
+    if (state?.message) {
+      toast.success(state.message);
+      setIsDeleteOpen(false);
+    }
+    if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+
+  return (
+    <>
+      <ButtonIcon variant="outline" onClick={() => setIsDeleteOpen(true)}>
+        <TrashIcon className="text-error" />
+      </ButtonIcon>
+      <Modal
+        title={`حذف ${postTitle}`}
+        open={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+      >
+        <ConfirmDelete
+          resourceName={postTitle}
+          onClose={() => setIsDeleteOpen(false)}
+          // onConfirm={deletePost.bind(null, postId)}
+          onConfirm={async (formData) => {
+            await formAction({ formData, postId });
+          }}
+        />
+      </Modal>
+    </>
   );
 }
