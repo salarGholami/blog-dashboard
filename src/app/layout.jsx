@@ -1,4 +1,4 @@
-import vazirFont from "@/constants/localFont";
+  import vazirFont from "@/constants/localFont";
 import "@/styles/globals.css";
 import { Toaster } from "react-hot-toast";
 import AuthProvier from "@/context/AuthContext";

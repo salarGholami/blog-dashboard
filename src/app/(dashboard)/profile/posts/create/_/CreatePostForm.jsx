@@ -130,55 +130,58 @@ function CreatePostForm({ postToEdit = {} }) {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      <RHFTextField
-        label="عنوان"
-        name="title"
-        register={register}
-        required
-        errors={errors}
-      />
-      <RHFTextField
-        label="متن کوتاه"
-        name="briefText"
-        register={register}
-        required
-        errors={errors}
-      />
-      <RHFTextField
-        label="متن"
-        name="text"
-        register={register}
-        required
-        errors={errors}
-      />
-      <RHFTextField
-        label="اسلاگ"
-        name="slug"
-        register={register}
-        required
-        errors={errors}
-      />
-      <RHFTextField
-        label="زمان مطالعه"
-        name="readingTime"
-        register={register}
-        required
-        errors={errors}
-      />
-      <RHFSelect
-        label="دسته بندی"
-        required
-        name="category"
-        register={register}
-        options={categories}
-      />
-      <Controller
-        control={control}
-        name="coverImage"
-        rules={{ required: "عکس کاور پست الزامی است" }}
-        render={({ field: { value, onChange, ...field } }) => {
-          return (
+    <form className="space-y-6 p-8 bg-secondary-0 rounded-xl" onSubmit={handleSubmit(onSubmit)}>
+      {/* Row 1 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <RHFTextField
+          label="عنوان"
+          name="title"
+          register={register}
+          required
+          errors={errors}
+          
+        />
+        <RHFTextField
+          label="اسلاگ"
+          name="slug"
+          register={register}
+          required
+          errors={errors}
+        />
+      </div>
+
+      {/* Row 2 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <RHFTextField
+          label="متن کوتاه"
+          name="briefText"
+          register={register}
+          required
+          errors={errors}
+        />
+        <RHFTextField
+          label="زمان مطالعه"
+          name="readingTime"
+          register={register}
+          required
+          errors={errors}
+        />
+      </div>
+
+      {/* Row 3 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <RHFSelect
+          label="دسته بندی"
+          required
+          name="category"
+          register={register}
+          options={categories}
+        />
+        <Controller
+          control={control}
+          name="coverImage"
+          rules={{ required: "عکس کاور پست الزامی است" }}
+          render={({ field: { value, onChange, ...field } }) => (
             <TextField
               {...field}
               value={value?.fileName}
@@ -191,16 +194,26 @@ function CreatePostForm({ postToEdit = {} }) {
               type="file"
               id="coverImage"
             />
-          );
-        }}
+          )}
+        />
+      </div>
+
+      {/* Full Width Field */}
+      <RHFTextField
+        label="متن"
+        name="text"
+        register={register}
+        required
+        errors={errors}
       />
 
+      {/* Image Preview */}
       {coverImageUrl && (
         <div className="relative aspect-w-16 aspect-h-9 overflow-hidden rounded-lg">
           <Image
             className="object-cover object-center"
             fill
-            alt="cover-iamge"
+            alt="cover-image"
             src={coverImageUrl}
           />
           <ButtonIcon
@@ -217,11 +230,12 @@ function CreatePostForm({ postToEdit = {} }) {
         </div>
       )}
 
+      {/* Submit Button */}
       <div>
         {isCreating || isEditing ? (
           <Loading />
         ) : (
-          <Button variant="primary" type="submit" className="w-full">
+          <Button variant="primary" type="submit" className="w-full max-w-xs">
             تایید
           </Button>
         )}
